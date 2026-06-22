@@ -1,0 +1,13 @@
+{
+  "_comment": "Ranked-tier registry of repos with discovered latent value. Append-only; promotion follows discovery.",
+  "ranked": [
+    {
+      "repo": "organvm/community-hub",
+      "organ": "ORGAN-VI",
+      "tier": "flagship",
+      "discovered": "2026-06-22",
+      "thesis": "Live 122-test FastAPI portal; estate's community-facing read API + personalization surface. Highest value: /api/manifest + adaptive-syllabus as the self-describing ORGAN-VI gateway. See DISCOVERY.md.",
+      "first_task": "Wire /api/manifest into the ORGAN-IV orchestration registry and add a CI step that publishes data/api-routes.json + data/community-stats.json via community-data-export."
+    }
+  ]
+}
