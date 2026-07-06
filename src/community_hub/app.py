@@ -91,7 +91,9 @@ def create_app() -> FastAPI:
     # Rate limiting
     limiter = Limiter(key_func=get_remote_address)
     app.state.limiter = limiter
-    app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
+    from typing import cast
+    from starlette.types import ExceptionHandler
+    app.add_exception_handler(RateLimitExceeded, cast(ExceptionHandler, _rate_limit_exceeded_handler))
 
     templates = Jinja2Templates(directory=str(TEMPLATE_DIR))
     # Make csrf_token available in all templates via request.state
@@ -109,8 +111,9 @@ def create_app() -> FastAPI:
         accept = request.headers.get("accept", "")
         if "text/html" in accept and not request.url.path.startswith("/api"):
             return templates.TemplateResponse(
-                "error.html",
-                {
+                request=request,
+                name="error.html",
+                context={
                     "request": request,
                     "status_code": exc.status_code,
                     "detail": exc.detail,
@@ -128,8 +131,9 @@ def create_app() -> FastAPI:
         accept = request.headers.get("accept", "")
         if "text/html" in accept and not request.url.path.startswith("/api"):
             return templates.TemplateResponse(
-                "error.html",
-                {
+                request=request,
+                name="error.html",
+                context={
                     "request": request,
                     "status_code": 500,
                     "detail": "Internal Server Error",
@@ -156,7 +160,7 @@ def create_app() -> FastAPI:
 
     @app.get("/")
     async def index(request: Request):
-        return templates.TemplateResponse("index.html", {"request": request})
+        return templates.TemplateResponse(request=request, name="index.html", context={"request": request})
 
     return app
 

@@ -1635,14 +1635,24 @@ def test_app_creates():
     app = create_app()
     assert app.title == "ORGAN-VI Community Hub"
     assert app.version == "0.4.0"
-    routes = [r.path for r in app.routes]
+    routes = [getattr(r, "path", getattr(r, "prefix", "")) for r in app.routes]
     assert "/" in routes
 
 
 def test_app_has_all_routers():
     from community_hub.app import create_app
     app = create_app()
-    routes = [r.path for r in app.routes]
+    def get_paths(routes, prefix=""):
+        paths = []
+        for r in routes:
+            if type(r).__name__ == "_IncludedRouter":
+                p = getattr(r.include_context, "prefix", "") or ""
+                paths.extend(get_paths(r.original_router.routes, prefix + p))
+            else:
+                paths.append(prefix + getattr(r, "path", getattr(r, "prefix", "")))
+        return paths
+        
+    routes = get_paths(app.routes)
     assert "/health" in routes
     assert "/salons" in routes or "/salons/" in routes
     assert "/search" in routes or "/search/" in routes

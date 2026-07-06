@@ -31,7 +31,7 @@ async def salon_list(
         sessions = result.scalars().all()
     prev_offset = max(0, offset - limit) if offset > 0 else None
     next_offset = offset + limit if offset + limit < total else None
-    return templates.TemplateResponse("salons/list.html", {
+    return templates.TemplateResponse(request=request, name="salons/list.html", context={
         "request": request,
         "sessions": sessions,
         "total": total,
@@ -55,7 +55,7 @@ async def salon_detail(request: Request, session_id: int):
             Segment.session_id == session_id
         ).order_by(Segment.start_seconds)
         segments = (await session.execute(stmt_s)).scalars().all()
-    return templates.TemplateResponse("salons/detail.html", {
+    return templates.TemplateResponse(request=request, name="salons/detail.html", context={
         "request": request,
         "salon": salon,
         "participants": participants,

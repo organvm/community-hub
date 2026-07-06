@@ -23,26 +23,36 @@ def extract_api_routes() -> list[dict[str, Any]]:
     app = create_app()
     routes: list[dict[str, Any]] = []
 
-    for route in app.routes:
-        # Skip Mount entries (static files) and catch-all
-        if not hasattr(route, "methods"):
-            continue
-        path = getattr(route, "path", "")
-        methods = sorted(route.methods - {"HEAD", "OPTIONS"}) if route.methods else []
-        if not methods:
-            continue
-        name = getattr(route, "name", "")
-        endpoint = getattr(route, "endpoint", None)
-        description = ""
-        if endpoint and endpoint.__doc__:
-            description = endpoint.__doc__.strip().split("\n")[0]
+    def walk_routes(route_list, prefix=""):
+        for route in route_list:
+            if type(route).__name__ == "_IncludedRouter":
+                p = getattr(route.include_context, "prefix", "") or ""
+                walk_routes(route.original_router.routes, prefix + p)
+                continue
 
-        routes.append({
-            "path": path,
-            "methods": methods,
-            "name": name,
-            "description": description,
-        })
+            methods_attr = getattr(route, "methods", None)
+            if not methods_attr:
+                continue
+
+            path = prefix + getattr(route, "path", "")
+            methods = sorted(methods_attr - {"HEAD", "OPTIONS"})
+            if not methods:
+                continue
+
+            name = getattr(route, "name", "")
+            endpoint = getattr(route, "endpoint", None)
+            description = ""
+            if endpoint and endpoint.__doc__:
+                description = endpoint.__doc__.strip().split("\n")[0]
+
+            routes.append({
+                "path": path,
+                "methods": methods,
+                "name": name,
+                "description": description,
+            })
+
+    walk_routes(app.routes)
 
     # Sort by path for deterministic output
     routes.sort(key=lambda r: r["path"])

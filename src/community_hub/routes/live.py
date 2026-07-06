@@ -122,7 +122,7 @@ async def salon_live(request: Request, session_id: int):
     """Render the live salon room page."""
     templates = request.app.state.templates
     count = manager.participant_count(str(session_id))
-    return templates.TemplateResponse("salons/live.html", {
+    return templates.TemplateResponse(request=request, name="salons/live.html", context={
         "request": request,
         "session_id": session_id,
         "participant_count": count,

@@ -18,7 +18,7 @@ limiter = Limiter(key_func=get_remote_address)
 async def syllabus_form(request: Request):
     """Show the syllabus generation form."""
     templates = request.app.state.templates
-    return templates.TemplateResponse("syllabus/form.html", {"request": request})
+    return templates.TemplateResponse(request=request, name="syllabus/form.html", context={"request": request})
 
 
 @router.post("/syllabus/generate")
@@ -27,12 +27,14 @@ async def syllabus_generate(request: Request):
     """Generate a learning path from form submission."""
     templates = request.app.state.templates
     form = await request.form()
-    organs = form.getlist("organs")
-    level = form.get("level", "beginner")
-    name = form.get("name", "anonymous")
+    organs = [str(o) for o in form.getlist("organs") if isinstance(o, str)]
+    level_raw = form.get("level", "beginner")
+    level = str(level_raw) if isinstance(level_raw, str) else "beginner"
+    name_raw = form.get("name", "anonymous")
+    name = str(name_raw) if isinstance(name_raw, str) else "anonymous"
 
     if not organs:
-        return templates.TemplateResponse("syllabus/form.html", {
+        return templates.TemplateResponse(request=request, name="syllabus/form.html", context={
             "request": request,
             "error": "Select at least one organ.",
         })
@@ -40,7 +42,7 @@ async def syllabus_generate(request: Request):
     async with request.app.state.db() as session:
         path = await generate_learning_path(session, organs, level, name)
 
-    return templates.TemplateResponse("syllabus/path.html", {
+    return templates.TemplateResponse(request=request, name="syllabus/path.html", context={
         "request": request,
         "path": path,
     })
@@ -82,7 +84,7 @@ async def syllabus_view(request: Request, path_id: str):
         ],
     }
 
-    return templates.TemplateResponse("syllabus/path.html", {
+    return templates.TemplateResponse(request=request, name="syllabus/path.html", context={
         "request": request,
         "path": path,
     })

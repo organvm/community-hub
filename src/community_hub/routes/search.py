@@ -93,7 +93,7 @@ async def search_page(request: Request, q: str = ""):
             results = await _search_all(session, q)
         total = sum(len(v) for v in results.values())
 
-    return templates.TemplateResponse("search.html", {
+    return templates.TemplateResponse(request=request, name="search.html", context={
         "request": request,
         "query": q,
         "results": results,

@@ -18,7 +18,7 @@ async def events_list(request: Request):
     async with request.app.state.db() as session:
         stmt = select(Event).order_by(Event.date.desc())
         events = (await session.execute(stmt)).scalars().all()
-    return templates.TemplateResponse("community/events.html", {
+    return templates.TemplateResponse(request=request, name="community/events.html", context={
         "request": request,
         "events": events,
     })
@@ -30,7 +30,7 @@ async def contributors_list(request: Request):
     async with request.app.state.db() as session:
         stmt = select(Contributor).order_by(Contributor.first_contribution_date.desc())
         contributors = (await session.execute(stmt)).scalars().all()
-    return templates.TemplateResponse("community/contributors.html", {
+    return templates.TemplateResponse(request=request, name="community/contributors.html", context={
         "request": request,
         "contributors": contributors,
     })
@@ -50,7 +50,7 @@ async def contributor_detail(request: Request, handle: str):
             .order_by(Contribution.date.desc())
         )
         contributions = (await session.execute(stmt_c)).scalars().all()
-    return templates.TemplateResponse("community/contributor_detail.html", {
+    return templates.TemplateResponse(request=request, name="community/contributor_detail.html", context={
         "request": request,
         "contributor": contributor,
         "contributions": contributions,
@@ -79,7 +79,7 @@ async def stats(request: Request):
         event_count = (await session.execute(
             select(func.count(Event.id))
         )).scalar() or 0
-    return templates.TemplateResponse("community/stats.html", {
+    return templates.TemplateResponse(request=request, name="community/stats.html", context={
         "request": request,
         "stats": {
             "salons": salon_count,
