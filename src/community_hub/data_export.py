@@ -28,7 +28,8 @@ def extract_api_routes() -> list[dict[str, Any]]:
         if not hasattr(route, "methods"):
             continue
         path = getattr(route, "path", "")
-        methods = sorted(route.methods - {"HEAD", "OPTIONS"}) if route.methods else []
+        route_methods = getattr(route, "methods", None)
+        methods = sorted(route_methods - {"HEAD", "OPTIONS"}) if route_methods else []
         if not methods:
             continue
         name = getattr(route, "name", "")

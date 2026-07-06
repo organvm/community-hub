@@ -27,9 +27,9 @@ async def syllabus_generate(request: Request):
     """Generate a learning path from form submission."""
     templates = request.app.state.templates
     form = await request.form()
-    organs = form.getlist("organs")
-    level = form.get("level", "beginner")
-    name = form.get("name", "anonymous")
+    organs = [str(o) for o in form.getlist("organs")]
+    level = str(form.get("level", "beginner"))
+    name = str(form.get("name", "anonymous"))
 
     if not organs:
         return templates.TemplateResponse("syllabus/form.html", {
