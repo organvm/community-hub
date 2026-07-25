@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Community Hub — Koinonia</title>
-<meta name="description" content="FastAPI flagship portal — salon archive, curricula browser, contributor profiles, full-text search,...">
+<meta name="description" content="ORGAN-VI Community Hub: salon archives, curricula, contributor profiles, search, feeds, and live rooms.">
 <!-- ORGANVM:PITCH:AUTO v1.0 generated 2026-03-20T01:13:08Z -->
 <style>
 /* ===== RESET & TOKENS ===== */
@@ -138,7 +138,7 @@ section{position:relative;width:100%;min-height:100vh;display:flex;align-items:c
   <div class="container">
     <span class="hero-badge">Koinonia &middot; flagship</span>
     <h1>Community Hub</h1>
-    <p class="tagline">FastAPI flagship portal — salon archive, curricula browser, contributor profiles, full-text search,...</p>
+    <p class="tagline">A public commons for salons, curricula, contributors, and live study.</p>
     <p class="description">FastAPI flagship portal — salon archive, curricula browser, contributor profiles, full-text search, adaptive syllabus, Atom feeds, WebSocket live rooms</p>
     <p class="scroll-hint" aria-hidden="true">scroll to explore</p>
   </div>
@@ -150,7 +150,9 @@ section{position:relative;width:100%;min-height:100vh;display:flex;align-items:c
     <p class="label">The Problem</p>
     <h2>Why This Exists</h2>
     <div class="card-grid">
-      <div class="card visible"><h3>Under Construction</h3><p>Problem statement coming soon.</p></div>
+      <div class="card visible"><h3>Knowledge gets stranded</h3><p>Salon recordings, reading lists, and curricula lose value when they live in separate archives without shared search or context.</p></div>
+      <div class="card visible"><h3>Participation stays invisible</h3><p>Contributors need a durable public record of sessions, learning paths, and the relationships that form around them.</p></div>
+      <div class="card visible"><h3>Live work disappears</h3><p>Communities need one front door that joins real-time rooms, structured archives, feeds, and reusable learning material.</p></div>
     </div>
   </div>
 </section>
@@ -172,7 +174,12 @@ section{position:relative;width:100%;min-height:100vh;display:flex;align-items:c
     <p class="label">Capabilities</p>
     <h2>Key Features</h2>
     <div class="feature-grid">
-      <div class="feature-card visible"><h3>In Development</h3><p>Feature list coming soon.</p></div>
+      <div class="feature-card visible"><h3>Salon archive</h3><p>Browse sessions, speakers, themes, transcripts, and related material as a connected record.</p></div>
+      <div class="feature-card visible"><h3>Curricula browser</h3><p>Move from reading lists to session-level study plans with clear sequencing and source context.</p></div>
+      <div class="feature-card visible"><h3>Contributor profiles</h3><p>See who is shaping the commons and how their participation connects across programs.</p></div>
+      <div class="feature-card visible"><h3>Full-text search</h3><p>Search salons, curricula, taxonomy, and community records through one consistent interface.</p></div>
+      <div class="feature-card visible"><h3>Adaptive syllabus</h3><p>Generate a learning path from interests and available community material instead of starting from a blank page.</p></div>
+      <div class="feature-card visible"><h3>Feeds and live rooms</h3><p>Follow new records through Atom feeds and join time-bound sessions through WebSocket-backed rooms.</p></div>
     </div>
   </div>
 </section>
@@ -185,7 +192,7 @@ section{position:relative;width:100%;min-height:100vh;display:flex;align-items:c
     <div class="tech-badges">
       <span class="tech-badge">Python</span>
     </div>
-    <p class="arch-text">**Key dependencies:** - **koinonia-db** — shared SQLAlchemy models, Alembic migrations (installed from git) - **FastAPI** — async web framework - **psycopg 3** — PostgreSQL async driver (Neon-compatible) - **Jinja2** — HTML templating - **slowapi** — rate limiting (per-IP)</p>
+    <p class="arch-text">FastAPI and Jinja2 serve the public HTML and JSON API. Shared SQLAlchemy models and Alembic migrations come from koinonia-db; PostgreSQL stores the institutional record, while per-IP rate limits and CSRF protection defend the visitor surface.</p>
   </div>
 </section>
 
@@ -199,11 +206,11 @@ section{position:relative;width:100%;min-height:100vh;display:flex;align-items:c
       <h2 class="organ-title">VI &mdash; Koinonia</h2>
     </div>
     <div class="edge-list">
-      <div class="edge-item"><span class="edge-dir">produces</span>{'type': 'web_application', 'format': 'html+json', 'description': 'Community portal with salon archive, curricula browser, and stats dashboard'}</div>
-      <div class="edge-item"><span class="edge-dir">produces</span>{'type': 'api', 'format': 'json', 'description': 'REST API for salons, curricula, taxonomy, and community stats'}</div>
-      <div class="edge-item"><span class="edge-dir">consumes</span>{'repo': 'koinonia-db', 'org': 'organvm-vi-koinonia', 'type': 'package', 'description': 'Shared database models and migrations'}</div>
-      <div class="edge-item"><span class="edge-dir">consumes</span>{'repo': 'salon-archive', 'org': 'organvm-vi-koinonia', 'type': 'data', 'description': 'Salon session data and transcripts'}</div>
-      <div class="edge-item"><span class="edge-dir">consumes</span>{'repo': 'reading-group-curriculum', 'org': 'organvm-vi-koinonia', 'type': 'data', 'description': 'Curriculum and reading list data'}</div>
+      <div class="edge-item"><span class="edge-dir">produces</span>Public web application for archives, curricula, contributors, search, and community statistics.</div>
+      <div class="edge-item"><span class="edge-dir">produces</span>JSON API for salons, curricula, taxonomy, search, and community data.</div>
+      <div class="edge-item"><span class="edge-dir">consumes</span>Shared database models and migrations from koinonia-db.</div>
+      <div class="edge-item"><span class="edge-dir">consumes</span>Session records and transcripts from the salon archive.</div>
+      <div class="edge-item"><span class="edge-dir">consumes</span>Curricula and reading-list data from the study program.</div>
     </div>
     <div class="siblings">
       <span class="sibling-tag">koinonia-db</span>
@@ -219,9 +226,10 @@ section{position:relative;width:100%;min-height:100vh;display:flex;align-items:c
 <section id="cta" data-section="6">
   <div class="container">
     <h2>Explore Community Hub</h2>
-    <p>FastAPI flagship portal — salon archive, curricula browser, contributor profiles, full-text search,...</p>
+    <p>This static front door stays fast and legible while the full portal wakes, preserving a reliable path to the live archive and its source.</p>
     <div class="cta-links">
-      <a href="https://github.com/organvm-vi-koinonia/community-hub" class="cta-btn" target="_blank" rel="noopener">View on GitHub</a>
+      <a href="https://community-hub-8p8t.onrender.com" class="cta-btn" target="_blank" rel="noopener">Open the live portal</a>
+      <a href="https://github.com/organvm/community-hub" class="cta-btn" target="_blank" rel="noopener">View the source</a>
     </div>
   </div>
 </section>
